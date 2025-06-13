@@ -26,8 +26,7 @@ ShopEasy WebSite é a interface web do sistema de e-commerce ShopEasy , desenvol
 - React.js
 - TypeScript
 - Tailwind CSS
-- NextUI (opcional, caso tenha usado)
-- FakeStore API ou ShopEasy API
+- ShopEasy API
 
 ---
 
