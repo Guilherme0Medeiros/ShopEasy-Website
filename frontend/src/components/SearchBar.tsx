@@ -1,4 +1,4 @@
-
+import { Search } from "lucide-react";
 export default function SearchBar() {
   return (
     <div className="bg-black flex items-center border border-gray-600 rounded-md px-4 py-2 w-full max-w-lg focus-within:border-white transition">

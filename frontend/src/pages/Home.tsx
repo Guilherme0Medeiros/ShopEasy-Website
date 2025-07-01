@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, ShoppingCart } from "lucide-react";
-import { useAuth } from "../context/AuthContext"; 
+import { useAuth } from "../context/AuthContext";
 import { ProductCard } from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
 import BannerCarousel from "../components/BannerCarousel";
 import CartSidebar from "../components/CartSidebar";
-import api from "../services/api"; 
+import api from "../services/api";
+import { Link } from "react-router-dom";
 
 interface Produto {
   id: number;
@@ -192,8 +193,12 @@ export default function Home() {
 
         {/* Menu de categorias */}
         <nav className="px-6 py-4 flex gap-6 justify-center text-sm uppercase font-semibold tracking-wide border-b border-gray-800">
-           <Link href="#"><a className="block">Camisetas</a></Link>
-    <Link href="#"><a className="block">Games</a></Link>
+          <Link to="/camisetas" className="block">
+            Camisetas
+          </Link>
+          <Link to="/games" className="block">
+            Games
+          </Link>
         </nav>
       </div>
 
