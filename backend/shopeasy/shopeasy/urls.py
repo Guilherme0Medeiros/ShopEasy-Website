@@ -8,7 +8,7 @@ from shop.api.v1.router import router
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from django.conf import settings
 from django.conf.urls.static import static
-from shop.api.v1.viewsets import RegisterView
+from shop.api.v1.viewsets import RegisterView , MeView , ChangePasswordView
 
 # Configuração do Swagger
 schema_view = get_schema_view(
@@ -33,6 +33,8 @@ urlpatterns = [
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('api/v1/register/', RegisterView.as_view(), name='register'),
+    path('api/v1/me/', MeView.as_view(), name='me'),
+    path('api/v1/change-password/', ChangePasswordView.as_view(), name='change-password'),
 ]
 
 if settings.DEBUG:

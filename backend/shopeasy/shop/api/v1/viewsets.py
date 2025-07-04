@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.views import APIView
+from .serializers import UserSerializer , ChangePasswordSerializer
+from django.contrib.auth.models import User
 
 from shop.models import Produto, Carrinho, ItemCarrinho, Pedido
 from .serializers import (
@@ -146,3 +148,48 @@ class RegisterView(APIView):
             serializer.save()
             return Response({'message': 'Usuário criado com sucesso!'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return User.objects.all()
+        return User.objects.filter(id=user.id) 
+    
+#para ver as informacoes do propio perfil
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+
+    def patch(self, request):
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)   
+    
+#mudar senha do usuario
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        user = request.user
+
+        if serializer.is_valid():
+            if not user.check_password(serializer.validated_data['current_password']):
+                return Response({"current_password": "Senha atual incorreta."}, status=400)
+
+            user.set_password(serializer.validated_data['new_password'])
+            user.save()
+            return Response({"message": "Senha atualizada com sucesso!"}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=400)     
